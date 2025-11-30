@@ -52,9 +52,8 @@ public final class iOSJailbreakDetector {
     /// - System-provided schemes do **not** require declaration and work by default.
     /// - **Jailbreak-specific schemes** like `cydia://` will **always return `false`**
     ///   in App Store apps, even on jailbroken devices, due to iOS sandboxing and
-    ///   security restrictions. App Store apps cannot detect or open these schemes
-    ///   regardless of device state. Use alternative jailbreak detection methods
-    ///   like file existence checks instead.
+    ///   security restrictions. This check is **blocked by design** for production App Store
+    ///   distribution, but works on Enterprise or sideloaded apps.
     ///
     /// - Parameter urlScheme: The URL whose scheme availability to check.
     /// - Returns: `true` if the system can open the URL, `false` otherwise.
