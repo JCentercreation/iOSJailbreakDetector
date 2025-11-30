@@ -72,6 +72,36 @@ public final class iOSJailbreakDetector {
         return false
     }
     
+    /// Checks if a suspicious file or directory exists, indicating potential jailbreak.
+    ///
+    /// This function performs dual verification using both high-level Foundation API
+    /// and low-level POSIX system call for robustness against jailbreak evasion techniques.
+    /// Commonly used to detect jailbreak artifacts like Cydia, MobileSubstrate, or APT repositories.
+    ///
+    /// **Typical paths to check**:
+    /// - `"/Applications/Cydia.app"`
+    /// - `"/private/var/lib/apt/"`
+    /// - `"/Library/MobileSubstrate/"`
+    /// - `"/usr/sbin/sshd"`
+    ///
+    /// **Detection Methods**:
+    /// 1. `FileManager.default.fileExists(atPath:)` - High-level Foundation API
+    /// 2. `access(path, F_OK)` - POSIX system call (returns 0 if file exists)
+    ///
+    /// - Parameter path: File system path to verify (e.g., jailbreak artifact location).
+    /// - Returns: `true` if the file/directory exists (suspicious), `false` otherwise.
+    public func checkSuspiciousFiles(path: String) -> Bool {
+        if FileManager.default.fileExists(atPath: path) {
+            return true
+        }
+
+        if access(path, F_OK) == 0 {
+            return true
+        }
+        
+        return false
+    }
+    
 }
 
 extension iOSJailbreakDetector {
