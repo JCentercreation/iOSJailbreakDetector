@@ -43,7 +43,18 @@ public final class iOSJailbreakDetector {
     /// Checks if the system can handle a URL with the given scheme.
     ///
     /// This function wraps `UIApplication.shared.canOpenURL(_:)` to determine
-    /// whether any installed app can open the provided URL.
+    /// whether the system or any installed app can open the provided URL.
+    ///
+    /// **Important**:
+    /// - Custom URL schemes from third-party apps **must** be explicitly declared
+    ///   in your app's `Info.plist` under `LSApplicationQueriesSchemes` for
+    ///   `canOpenURL(_:)` to return `true`.
+    /// - System-provided schemes do **not** require declaration and work by default.
+    /// - **Jailbreak-specific schemes** like `cydia://` will **always return `false`**
+    ///   in App Store apps, even on jailbroken devices, due to iOS sandboxing and
+    ///   security restrictions. App Store apps cannot detect or open these schemes
+    ///   regardless of device state. Use alternative jailbreak detection methods
+    ///   like file existence checks instead.
     ///
     /// - Parameter urlScheme: The URL whose scheme availability to check.
     /// - Returns: `true` if the system can open the URL, `false` otherwise.
