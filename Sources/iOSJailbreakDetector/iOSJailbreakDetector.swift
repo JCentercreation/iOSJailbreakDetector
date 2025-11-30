@@ -40,6 +40,20 @@ public final class iOSJailbreakDetector {
         return JailbreakDetectionResult(isJailBroken: isJailbreakDetected, jailbreakDetectionIndicator: indicatorsDetected, estimatedConfidenceLevel: estimatedConfidenceLevel)
     }
     
+    /// Checks if the system can handle a URL with the given scheme.
+    ///
+    /// This function wraps `UIApplication.shared.canOpenURL(_:)` to determine
+    /// whether any installed app can open the provided URL.
+    ///
+    /// - Parameter urlScheme: The URL whose scheme availability to check.
+    /// - Returns: `true` if the system can open the URL, `false` otherwise.
+    public func checkURLScheme(urlScheme: URL) -> Bool {
+        if UIApplication.shared.canOpenURL(urlScheme) {
+            return true
+        }
+        return false
+    }
+    
 }
 
 extension iOSJailbreakDetector {
