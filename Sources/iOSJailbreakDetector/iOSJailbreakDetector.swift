@@ -23,6 +23,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkSuspiciousFiles() {
+            totalChecks += 1
+            indicatorsDetected.append(.suspiciousFilesDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -80,6 +88,32 @@ extension iOSJailbreakDetector {
             }
         }
         
+        return false
+    }
+    
+    private func checkSuspiciousFiles() -> Bool {
+        let paths = [
+            "/Applications/Cydia.app",
+            "/Library/MobileSubstrate/MobileSubstrate.dylib",
+            "/bin/bash",
+            "/usr/sbin/sshd",
+            "/etc/apt",
+            "/private/var/lib/apt",
+            "/usr/bin/ssh",
+            "/usr/libexec/sftp-server",
+            "/Library/PreferenceBundles/LibertyPref.bundle",
+            "/Library/PreferenceBundles/ShadowPreferences.bundle"
+        ]
+
+        for path in paths {
+            if FileManager.default.fileExists(atPath: path) {
+                return true
+            }
+
+            if access(path, F_OK) == 0 {
+                return true
+            }
+        }
         return false
     }
     

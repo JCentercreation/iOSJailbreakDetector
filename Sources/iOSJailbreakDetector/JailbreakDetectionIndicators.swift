@@ -4,7 +4,7 @@
 
 public enum JailbreakDetectionIndicators: CaseIterable {
     case jailbreakURLSchemesDetected
-    case suspiciusFilesDetected
+    case suspiciousFilesDetected
     case systemPathsViolatedDetected
     case dynamicLinkerInjectionDetected
     case sandboxCompromisedIntegrityDetected
