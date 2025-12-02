@@ -63,6 +63,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkForkBehaviour() {
+            totalChecks += 1
+            indicatorsDetected.append(.forkBehaviourAnomalyDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -381,6 +389,22 @@ extension iOSJailbreakDetector {
                 continue
             }
         }
+        return false
+    }
+    
+    private func checkForkBehaviour() -> Bool {
+        var pid: pid_t = 0
+        let args: [UnsafeMutablePointer<CChar>?] = [nil]
+        let env: [UnsafeMutablePointer<CChar>?] = [nil]
+
+        let status = posix_spawn(&pid, "/bin/ls", nil, nil, args, env)
+
+        if status == 0 {
+            var exitStatus: Int32 = 0
+            waitpid(pid, &exitStatus, 0)
+            return true
+        }
+
         return false
     }
     
