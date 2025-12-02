@@ -161,6 +161,39 @@ public final class iOSJailbreakDetector {
         return .clean
     }
     
+    /// Detects if a specific dynamic library associated with jailbreak tools is loaded into the current process.
+    ///
+    /// Attempts to dynamically load the specified library using `dlopen` with `RTLD_NOW` mode. A successful load
+    /// (non-nil handle) indicates that the library is present in the process address space, typically due to
+    /// DYLD injection by jailbreak frameworks like Cydia Substrate or libhooker.
+    ///
+    /// - Parameters:
+    ///   - library: The name of the dynamic library to check (e.g., `"MobileSubstrate.dylib"`, `"libhooker.dylib"`).
+    ///
+    /// - Returns: `true` if the library can be loaded (jailbreak indicator), `false` otherwise.
+    ///
+    /// - Note: This is a building block for comprehensive DYLD injection detection. Common jailbreak libraries include:
+    ///   ```
+    ///   "SubstrateLoader.dylib", "MobileSubstrate.dylib", "libhooker.dylib",
+    ///   "SSLKillSwitch2.dylib", "SSLKillSwitch.dylib"
+    ///   ```
+    ///
+    /// Usage example:
+    /// ```
+    /// if checkDYLDInjection(library: "MobileSubstrate.dylib") {
+    ///     print("DYLD injection detected")
+    /// }
+    /// ```
+    ///
+    /// - Important: Requires `import Darwin`. Use as part of layered jailbreak detection; modern jailbreaks may hook `dlopen`.
+    public func checkDYLDInjection(library: String) -> Bool {
+        if dlopen(library, RTLD_NOW) != nil {
+            return true
+        }
+
+        return false
+    }
+    
 }
 
 extension iOSJailbreakDetector {
