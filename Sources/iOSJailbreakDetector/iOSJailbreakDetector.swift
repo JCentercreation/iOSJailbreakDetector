@@ -102,6 +102,49 @@ public final class iOSJailbreakDetector {
         return false
     }
     
+    /// Checks for jailbreak by detecting suspicious system files and measuring access time to those files.
+    ///
+    /// Attempts to detect a jailbroken iOS device by checking for the existence of known jailbreak-related files outside the app sandbox.
+    /// Measures the duration of each access to identify potential hooks or delays indicative of jailbreak tampering.
+    ///
+    /// - Returns: A `SuspiciousFilesWithTimingResult` indicating the detection status:
+    ///   - `.clean` if no suspicious files or delays detected
+    ///   - `.jailbroken(accessTime:path)` if a suspicious file was accessed quickly (jailbreak confirmed)
+    ///   - `.suspicious(delay:path)` if file access was delayed suspiciously, indicating possible runtime hooking or tampering
+    ///
+    /// - Note: Timing thresholds (e.g., 50ms) may require tuning based on device and iOS version.
+    ///
+    /// Usage example:
+    /// ```
+    /// let result = checkSuspiciousFilesWithTiming(path: "/Applications/Cydia.app", suspiciousJailbreakHookTimingInMiliSeconds: 0.05)
+    /// switch result {
+    /// case .clean:
+    ///     print("Device appears clean")
+    /// case let .jailbroken(time, path):
+    ///     print("Jailbreak detected! Accessed $$path) in $$time * 1000) ms")
+    /// case let .suspicious(delay, path):
+    ///     print("Suspicious delay accessing $$path): $$delay * 1000) ms")
+    /// }
+    /// ```
+    ///
+    /// - Important: This function is intended as part of a layered jailbreak detection strategy and should not be solely relied upon.
+    /// It uses `CFAbsoluteTimeGetCurrent()` for precise timing without extra dependencies.
+    public func checkSuspiciousFilesWithTiming(path: String, suspiciousJailbreakHookTimingInMiliSeconds: Double) -> SuspiciousFilesWithTimingResult {
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let fileExists = FileManager.default.fileExists(atPath: path)
+        let duration = CFAbsoluteTimeGetCurrent() - startTime
+        
+        if fileExists {
+            return .jailbroken(accessTime: duration, path: path)
+        }
+        
+        if duration > suspiciousJailbreakHookTimingInMiliSeconds {
+            return .suspicious(delay: duration, path: path)
+        }
+        
+        return .clean
+    }
+    
 }
 
 extension iOSJailbreakDetector {
