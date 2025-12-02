@@ -71,6 +71,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkEnvironmentVariables() {
+            totalChecks += 1
+            indicatorsDetected.append(.suspiciousEnvironmentVariablesDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -403,6 +411,23 @@ extension iOSJailbreakDetector {
             var exitStatus: Int32 = 0
             waitpid(pid, &exitStatus, 0)
             return true
+        }
+
+        return false
+    }
+    
+    private func checkEnvironmentVariables() -> Bool {
+        let suspiciousVars = [
+            "DYLD_INSERT_LIBRARIES",
+            "_MSSafeMode",
+            "_SafeMode",
+            "DYLD_LIBRARY_PATH"
+        ]
+
+        for variable in suspiciousVars {
+            if getenv(variable) != nil {
+                return true
+            }
         }
 
         return false
