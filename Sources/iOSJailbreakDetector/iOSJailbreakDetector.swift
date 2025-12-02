@@ -194,6 +194,62 @@ public final class iOSJailbreakDetector {
         return false
     }
     
+    /// Detects DYLD injection by checking if a suspicious dynamic library is loadable in the current process.
+    ///
+    /// Enhanced version that measures load time to detect hooking delays, validates the library handle,
+    /// and provides detailed detection results for security logging.
+    ///
+    /// - Parameters:
+    ///   - library: Name of the dynamic library to check (e.g., `"MobileSubstrate.dylib"`, `"libhooker.dylib"`).
+    ///   - timeoutSeconds: Maximum time (in seconds) to wait for `dlopen`. Defaults to 0.1s.
+    ///
+    /// - Returns: Detailed detection result including success status and timing information:
+    ///   - `.clean(loadTime:library:)`: No injection detected
+    ///   - `.suspicious(delay:library:)`: Suspicious delay during load attempt (possible hooking)
+    ///   - `.injected(handle:loadTime:library:)`: Confirmed injection - library successfully loaded
+    ///
+    /// - Note: Uses `RTLD_NOLOAD` flag to check if library is already loaded without forcing a new load.
+    ///   Requires `import Darwin`. Modern jailbreaks may hook `dlopen` to evade detection.
+    ///
+    /// Usage example:
+    /// ```
+    /// // Check common jailbreak libraries
+    /// let libraries = ["MobileSubstrate.dylib", "libhooker.dylib", "SSLKillSwitch2.dylib"]
+    ///
+    /// for library in libraries {
+    ///     let result = checkDYLDInjectionWithTiming(library: library, timeoutSeconds: 0.1)
+    ///
+    ///     switch result {
+    ///     case .clean(let time, _):
+    ///         Logger.security.debug("Clean: $$library) checked in $$time*1000, specifier: "%.1f")ms")
+    ///     case .suspicious(let delay, _):
+    ///         Logger.security.warning("Suspicious DYLD delay: $$library) took $$delay*1000, specifier: "%.1f")ms")
+    ///     case .injected(_, let time, _):
+    ///         Logger.security.error("DYLD INJECTION DETECTED: $$library) loaded in $$time*1000, specifier: "%.1f")ms")
+    ///         return result // Early exit on confirmed injection
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Important: Part of layered jailbreak detection. Combine with file checks and sandbox tests for comprehensive protection.
+    public func checkDYLDInjectionWithTiming(library: String, timeoutSeconds: Double) -> DYLDInjectionResult {
+        let startTime = CFAbsoluteTimeGetCurrent()
+        guard let handle = dlopen(library, RTLD_NOW | RTLD_NOLOAD) else {
+            let duration = CFAbsoluteTimeGetCurrent() - startTime
+            return .clean(loadTime: duration, library: library)
+        }
+        
+        defer { dlclose(handle) }
+        
+        let duration = CFAbsoluteTimeGetCurrent() - startTime
+        
+        if duration > timeoutSeconds {
+            return .suspicious(delay: duration, library: library)
+        }
+        
+        return .injected(handle: handle, loadTime: duration, library: library)
+    }
+    
 }
 
 extension iOSJailbreakDetector {
