@@ -39,6 +39,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkDYLDInjection() {
+            totalChecks += 1
+            indicatorsDetected.append(.dynamicLinkerInjectionDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -209,6 +217,26 @@ extension iOSJailbreakDetector {
         } catch {
             return false
         }
+    }
+    
+    private func checkDYLDInjection() -> Bool {
+        let suspiciousLibraries = [
+            "SubstrateLoader.dylib",
+            "SSLKillSwitch2.dylib",
+            "SSLKillSwitch.dylib",
+            "MobileSubstrate.dylib",
+            "libhooker.dylib",
+            "SubstrateBootstrap.dylib",
+            "SubstrateInserter.dylib"
+        ]
+
+        for library in suspiciousLibraries {
+            if dlopen(library, RTLD_NOW) != nil {
+                return true
+            }
+        }
+
+        return false
     }
     
 }
