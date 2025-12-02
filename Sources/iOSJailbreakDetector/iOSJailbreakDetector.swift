@@ -132,7 +132,7 @@ public final class iOSJailbreakDetector {
     ///
     /// Usage example:
     /// ```
-    /// let result = checkSuspiciousFilesWithTiming(path: "/Applications/Cydia.app", suspiciousJailbreakHookTimingInMiliSeconds: 0.05)
+    /// let result = checkSuspiciousFilesWithTiming(path: "/Applications/Cydia.app", suspiciousJailbreakHookTimingInSeconds: 0.05)
     /// switch result {
     /// case .clean:
     ///     print("Device appears clean")
@@ -145,7 +145,7 @@ public final class iOSJailbreakDetector {
     ///
     /// - Important: This function is intended as part of a layered jailbreak detection strategy and should not be solely relied upon.
     /// It uses `CFAbsoluteTimeGetCurrent()` for precise timing without extra dependencies.
-    public func checkSuspiciousFilesWithTiming(path: String, suspiciousJailbreakHookTimingInMiliSeconds: Double) -> SuspiciousFilesWithTimingResult {
+    public func checkSuspiciousFilesWithTiming(path: String, suspiciousJailbreakHookTimingInSeconds: Double) -> SuspiciousFilesWithTimingResult {
         let startTime = CFAbsoluteTimeGetCurrent()
         let fileExists = FileManager.default.fileExists(atPath: path)
         let duration = CFAbsoluteTimeGetCurrent() - startTime
@@ -154,7 +154,7 @@ public final class iOSJailbreakDetector {
             return .jailbroken(accessTime: duration, path: path)
         }
         
-        if duration > suspiciousJailbreakHookTimingInMiliSeconds {
+        if duration > suspiciousJailbreakHookTimingInSeconds {
             return .suspicious(delay: duration, path: path)
         }
         
