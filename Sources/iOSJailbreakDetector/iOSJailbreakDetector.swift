@@ -31,6 +31,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkSystemPathViolations() {
+            totalChecks += 1
+            indicatorsDetected.append(.systemPathsViolationDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -188,6 +196,19 @@ extension iOSJailbreakDetector {
             }
         }
         return false
+    }
+    
+    private func checkSystemPathViolations() -> Bool {
+        do {
+            let testString = "jailbreak_test"
+            let testPath = "/private/jailbreak_test.txt"
+
+            try testString.write(toFile: testPath, atomically: true, encoding: .utf8)
+            try FileManager.default.removeItem(atPath: testPath)
+            return true
+        } catch {
+            return false
+        }
     }
     
 }
