@@ -55,6 +55,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkSymbolicLinks() {
+            totalChecks += 1
+            indicatorsDetected.append(.suspiciousSymbolicLinksDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -348,6 +356,31 @@ extension iOSJailbreakDetector {
             return (info.kp_proc.p_flag & P_TRACED) != 0
         }
 
+        return false
+    }
+    
+    private func checkSymbolicLinks() -> Bool {
+        let checkPaths = [
+            "/Applications",
+            "/Library/Ringtones",
+            "/Library/Wallpaper",
+            "/usr/arm-apple-darwin9",
+            "/usr/include",
+            "/usr/libexec",
+            "/usr/share"
+        ]
+
+        for path in checkPaths {
+            do {
+                let attributes = try FileManager.default.attributesOfItem(atPath: path)
+                if let fileType = attributes[.type] as? FileAttributeType,
+                   fileType == .typeSymbolicLink {
+                    return true
+                }
+            } catch {
+                continue
+            }
+        }
         return false
     }
     
