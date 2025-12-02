@@ -47,6 +47,14 @@ public final class iOSJailbreakDetector {
             totalChecks += 1
         }
         
+        if checkSandboxIntegrity() {
+            totalChecks += 1
+            indicatorsDetected.append(.sandboxCompromisedIntegrityDetected)
+            detectionsCounter += 1
+        } else {
+            totalChecks += 1
+        }
+        
         var estimatedConfidenceLevel: Float {
             if totalChecks > 0 {
                 return Float(detectionsCounter / totalChecks)
@@ -323,6 +331,21 @@ extension iOSJailbreakDetector {
             if dlopen(library, RTLD_NOW) != nil {
                 return true
             }
+        }
+
+        return false
+    }
+    
+    private func checkSandboxIntegrity() -> Bool {
+        let pid = getpid()
+        var info = kinfo_proc()
+        var mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
+        var size = MemoryLayout<kinfo_proc>.stride
+
+        let result = sysctl(&mib, UInt32(mib.count), &info, &size, nil, 0)
+
+        if result == 0 {
+            return (info.kp_proc.p_flag & P_TRACED) != 0
         }
 
         return false
