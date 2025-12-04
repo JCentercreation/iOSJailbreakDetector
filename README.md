@@ -40,7 +40,8 @@ Key features include:
 
 Add to `Package.swift`:
 ```swift
-dependencies: [ .package(url: “https://github.com/jcentercreation/iOSJailbreakDetector.git”, from: “1.0.0”) ]
+dependencies: [ .package(url: “https://github.com/jcentercreation/iOSJailbreakDetector.git”, from: “1.0.0”)
+    ]
 ```
 
 ### Xcode
@@ -53,15 +54,33 @@ dependencies: [ .package(url: “https://github.com/jcentercreation/iOSJailbre
 
 ### Basic Detection
 ```swift
-import iOSJailbreakDetector import OSLog
-let detector = iOSJailbreakDetector.shared let result = detector.detectJailbreak()
-if result.isJailBroken && result.estimatedConfidenceLevel > 0.5 { Logger.security.error( “”” Jailbreak detected: result.jailbreakDetectionIndicator.map { “$0)” }) Confidence: $$result.estimatedConfidenceLevel, format: .percent) “”” ) // Implement security measures } else { Logger.security.info(“Device verified clean”) }
+import iOSJailbreakDetector
+import OSLog
+
+let detector = iOSJailbreakDetector.shared
+let result = detector.detectJailbreak()
+
+if result.isJailBroken && result.estimatedConfidenceLevel > 0.5 {
+    Logger.security.error(“””Jailbreak detected: result.jailbreakDetectionIndicator.map { “$0)” }) Confidence: $$result.estimatedConfidenceLevel, format: .percent)“””)
+    // Implement security measures
+} else {
+    Logger.security.info(“Device verified clean”)
+}
 ```
 
 ### Advanced Timing Analysis
 ```swift
-// File existence with hooking detection let fileResult = detector.checkSuspiciousFilesWithTiming( path: “/Applications/Cydia.app”, suspiciousJailbreakHookTimingInSeconds: 0.05 )
-switch fileResult { case .jailbroken(let time, let path): Logger.security.error(“Jailbreak artifact: time * 1000, specifier: “%.1f”)]ms”) case .suspicious(let delay, let path): Logger.security.warning(“Runtime hooking: delay * 1000, specifier: “%.1f”)]ms delay”) case .clean: break }
+// File existence with hooking detection
+let fileResult = detector.checkSuspiciousFilesWithTiming(path: “/Applications/Cydia.app", suspiciousJailbreakHookTimingInSeconds: 0.05)
+
+switch fileResult {
+    case .jailbroken(let time, let path):
+        Logger.security.error(“Jailbreak artifact: time * 1000, specifier: “%.1f”)]ms”)
+    case .suspicious(let delay, let path):
+        Logger.security.warning(“Runtime hooking: delay * 1000, specifier: “%.1f”)]ms delay”)
+    case .clean:
+        break
+    }
 ```
 
 ## Detection Methods
@@ -119,7 +138,10 @@ _*App Store apps cannot detect jailbreak URL schemes due to sandboxing_
 ## Optional Configuration
 
 ### Info.plist (URL Schemes)
-LSApplicationQueriesSchemes cydia filza sileo
+LSApplicationQueriesSchemes
+- cydia
+- filza
+- sileo
 
 ## License
 
