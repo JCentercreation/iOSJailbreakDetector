@@ -1,5 +1,9 @@
 # iOSJailbreakDetector
 
+**Swift Package Manager** • **MIT License**
+
+Multi-layered jailbreak detection library for iOS applications. Implements 8 independent detection vectors with confidence scoring and timing-based evasion resistance.
+
 <div align="center">
 
 ![Swift](https://img.shields.io/badge/Swift-5.0+-orange.svg)
@@ -7,13 +11,9 @@
 ![Xcode](https://img.shields.io/badge/Xcode-12.0+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-[Installation](#-installation) • [Usage](#-usage) • [Detection Methods](#-detection_methods) • [Limitations](#-limitations)
+[Installation](#-installation)  
 
 </div>
-
-**Swift Package Manager** • **MIT License**
-
-Multi-layered jailbreak detection library for iOS applications. Implements 8 independent detection vectors with confidence scoring and timing-based evasion resistance.
 
 ## Overview
 
