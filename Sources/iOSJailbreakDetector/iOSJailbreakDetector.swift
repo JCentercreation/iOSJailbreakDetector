@@ -344,18 +344,50 @@ public final class iOSJailbreakDetector {
 
 extension iOSJailbreakDetector {
     
+    /// Comprehensive result structure containing all jailbreak detection outcomes.
+    ///
+    /// Aggregates results from multiple detection vectors into a single response with confidence scoring.
+    /// Designed for security logging, risk assessment, and conditional app behavior.
+    ///
+    /// **Usage Example:**
+    /// ```
+    /// let result = iOSJailbreakDetector.shared.detectJailbreak()
+    /// if result.isJailBroken && result.estimatedConfidenceLevel > 0.5 {
+    ///     // High-confidence jailbreak - restrict sensitive features
+    ///     showJailbreakWarning()
+    /// }
+    /// Logger.security.info("Jailbreak indicators: $$result.jailbreakDetectionIndicator)")
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - isJailBroken: `true` if any detection indicators were triggered
+    ///   - jailbreakDetectionIndicator: Array of specific indicators that fired (for forensics)
+    ///   - estimatedConfidenceLevel: Detection confidence (0.0 = clean, 1.0 = all checks failed)
     public struct JailbreakDetectionResult {
         let isJailBroken: Bool
         let jailbreakDetectionIndicator: [JailbreakDetectionIndicators]
         let estimatedConfidenceLevel: Float
     }
     
-    public enum DYLDInjectionResult {
-        case clean(loadTime: Double, library: String)
-        case suspicious(delay: Double, library: String)
-        case injected(handle: UnsafeMutableRawPointer?, loadTime: Double, library: String)
-    }
-    
+    /// Individual jailbreak detection indicators for granular reporting.
+    ///
+    /// Each case represents a specific detection vector. `CaseIterable` enables:
+    /// - Iteration over all possible indicators
+    /// - Bitmask-style tracking
+    /// - Logging and analytics
+    ///
+    /// **Usage Examples:**
+    /// ```
+    /// // Iterate all possible indicators
+    /// for indicator in JailbreakDetectionIndicators.allCases {
+    ///     print(indicator.rawValue)
+    /// }
+    ///
+    /// // Check specific indicator
+    /// if result.jailbreakDetectionIndicator.contains(.dynamicLinkerInjectionDetected) {
+    ///     reportDYLDInjection()
+    /// }
+    /// ```
     public enum JailbreakDetectionIndicators: CaseIterable {
         case jailbreakURLSchemesDetected
         case suspiciousFilesDetected
@@ -367,10 +399,59 @@ extension iOSJailbreakDetector {
         case suspiciousEnvironmentVariablesDetected
     }
     
+    /// Result from suspicious file detection with timing analysis.
+    ///
+    /// Measures file existence check duration to detect runtime hooking.
+    /// Quick access to non-existent jailbreak files indicates sandbox bypass.
+    ///
+    /// **Usage Example:**
+    /// ```
+    /// let result = detector.checkSuspiciousFilesWithTiming(
+    ///     path: "/Applications/Cydia.app",
+    ///     suspiciousJailbreakHookTimingInSeconds: 0.05
+    /// )
+    /// switch result {
+    /// case .jailbroken(let time, let path):
+    ///     Logger.error("Cydia detected at $$path) in $$time*1000)ms")
+    /// case .suspicious(let delay, let path):
+    ///     Logger.warning("Hooking detected on $$path): $$delay*1000)ms delay")
+    /// case .clean: break
+    /// }
+    /// ```
+    ///
+    /// **Usage Example Timing Thresholds:**
+    /// - `< 50ms` + file exists = `.jailbroken` (direct access)
+    /// - `> 50ms` on non-existent = `.suspicious` (hooking delay)
+    /// - Normal timing = `.clean`
     public enum SuspiciousFilesWithTimingResult {
         case clean
         case jailbroken(accessTime: Double, path: String)
         case suspicious(delay: Double, path: String)
+    }
+    
+    /// Detailed result from DYLD injection detection with timing analysis.
+    ///
+    /// Analyzes dynamic library loading behavior to detect Substrate/libhooker injection.
+    /// Includes timing measurements to identify runtime hooking delays.
+    ///
+    /// **Detection Logic:**
+    /// - `.clean`: Library not present, normal load time
+    /// - `.suspicious`: Unexpected delay (hooking indicator)
+    /// - `.injected`: Jailbreak library successfully loaded into process
+    ///
+    /// **Usage Example:**
+    /// ```
+    /// let result = detector.checkDYLDInjectionWithTiming(library: "MobileSubstrate.dylib", timeoutSeconds: 0.1)
+    /// switch result {
+    /// case .injected(_, let time, let lib): Logger.error("DYLD INJECTION: $$lib)")
+    /// case .suspicious(let delay, _): Logger.warning("Suspicious DYLD delay: $$delay*1000)ms")
+    /// case .clean: break
+    /// }
+    /// ```
+    public enum DYLDInjectionResult {
+        case clean(loadTime: Double, library: String)
+        case suspicious(delay: Double, library: String)
+        case injected(handle: UnsafeMutableRawPointer?, loadTime: Double, library: String)
     }
     
 }
