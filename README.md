@@ -149,8 +149,8 @@ MIT License © 2025
 
 <div align="center">
 
-**Made for the iOS development community**
-**Use it responsibly**
+**Made for the iOS development community.**
+**Use it responsibly.**
 
 [⬆ Back to Top](#iOSJailbreakDetector)
 
