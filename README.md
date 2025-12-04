@@ -80,7 +80,7 @@ switch fileResult {
         Logger.security.warning(“Runtime hooking: delay * 1000, specifier: “%.1f”)]ms delay”)
     case .clean:
         break
-    }
+}
 ```
 
 ## Detection Methods
