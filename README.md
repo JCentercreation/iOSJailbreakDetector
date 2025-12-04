@@ -71,7 +71,7 @@ if result.isJailBroken && result.estimatedConfidenceLevel > 0.5 {
 ### Advanced Timing Analysis
 ```swift
 // File existence with hooking detection
-let fileResult = detector.checkSuspiciousFilesWithTiming(path: “/Applications/Cydia.app", suspiciousJailbreakHookTimingInSeconds: 0.05)
+let fileResult = detector.checkSuspiciousFilesWithTiming(path: “/Applications/Cydia.app“, suspiciousJailbreakHookTimingInSeconds: 0.05)
 
 switch fileResult {
     case .jailbroken(let time, let path):
