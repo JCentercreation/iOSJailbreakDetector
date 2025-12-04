@@ -22,7 +22,7 @@
 ///   - jailbreakDetectionIndicator: Array of specific indicators that fired (for forensics)
 ///   - estimatedConfidenceLevel: Detection confidence (0.0 = clean, 1.0 = all checks failed)
 public struct JailbreakDetectionResult {
-    let isJailBroken: Bool
-    let jailbreakDetectionIndicator: [JailbreakDetectionIndicators]
-    let estimatedConfidenceLevel: Float
+    public let isJailBroken: Bool
+    public let jailbreakDetectionIndicator: [JailbreakDetectionIndicators]
+    public let estimatedConfidenceLevel: Float
 }
