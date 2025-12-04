@@ -40,7 +40,7 @@ Key features include:
 
 Add to `Package.swift`:
 ```swift
-dependencies: [ .package(url: “https://github.com/jcentercreation/iOSJailbreakDetector.git”, from: “1.0.0”)
+dependencies: [ .package(url: “https://github.com/JCentercreation/iOSJailbreakDetector.git”, from: “1.0.0”)
     ]
 ```
 
