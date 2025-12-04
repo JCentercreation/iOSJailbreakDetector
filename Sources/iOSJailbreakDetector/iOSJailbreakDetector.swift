@@ -37,7 +37,7 @@ public final class iOSJailbreakDetector {
     /// - `estimatedConfidenceLevel`: Float confidence (0.125 = 1/8 checks, 1.0 = all checks failed)
     ///
     /// **Usage Example:**
-    /// ```
+    /// ```swift
     /// let result = iOSJailbreakDetector.shared.detectJailbreak()
     /// if result.isJailBroken {
     ///     Logger.security.error("Jailbreak detected: $$result.jailbreakDetectionIndicator) Confidence: $$result.estimatedConfidenceLevel)")
@@ -221,7 +221,7 @@ public final class iOSJailbreakDetector {
     /// - Note: Timing thresholds (e.g., 50ms) may require tuning based on device and iOS version.
     ///
     /// Usage example:
-    /// ```
+    /// ```swift
     /// let result = checkSuspiciousFilesWithTiming(path: "/Applications/Cydia.app", suspiciousJailbreakHookTimingInSeconds: 0.05)
     /// switch result {
     /// case .clean:
@@ -269,7 +269,7 @@ public final class iOSJailbreakDetector {
     ///   ```
     ///
     /// Usage example:
-    /// ```
+    /// ```swift
     /// if checkDYLDInjection(library: "MobileSubstrate.dylib") {
     ///     print("DYLD injection detected")
     /// }
@@ -302,7 +302,7 @@ public final class iOSJailbreakDetector {
     ///   Requires `import Darwin`. Modern jailbreaks may hook `dlopen` to evade detection.
     ///
     /// Usage example:
-    /// ```
+    /// ```swift
     /// // Check common jailbreak libraries
     /// let libraries = ["MobileSubstrate.dylib", "libhooker.dylib", "SSLKillSwitch2.dylib"]
     ///
@@ -350,7 +350,7 @@ extension iOSJailbreakDetector {
     /// Designed for security logging, risk assessment, and conditional app behavior.
     ///
     /// **Usage Example:**
-    /// ```
+    /// ```swift
     /// let result = iOSJailbreakDetector.shared.detectJailbreak()
     /// if result.isJailBroken && result.estimatedConfidenceLevel > 0.5 {
     ///     // High-confidence jailbreak - restrict sensitive features
@@ -377,7 +377,7 @@ extension iOSJailbreakDetector {
     /// - Logging and analytics
     ///
     /// **Usage Examples:**
-    /// ```
+    /// ```swift
     /// // Iterate all possible indicators
     /// for indicator in JailbreakDetectionIndicators.allCases {
     ///     print(indicator.rawValue)
@@ -405,7 +405,7 @@ extension iOSJailbreakDetector {
     /// Quick access to non-existent jailbreak files indicates sandbox bypass.
     ///
     /// **Usage Example:**
-    /// ```
+    /// ```swift
     /// let result = detector.checkSuspiciousFilesWithTiming(
     ///     path: "/Applications/Cydia.app",
     ///     suspiciousJailbreakHookTimingInSeconds: 0.05
@@ -440,7 +440,7 @@ extension iOSJailbreakDetector {
     /// - `.injected`: Jailbreak library successfully loaded into process
     ///
     /// **Usage Example:**
-    /// ```
+    /// ```swift
     /// let result = detector.checkDYLDInjectionWithTiming(library: "MobileSubstrate.dylib", timeoutSeconds: 0.1)
     /// switch result {
     /// case .injected(_, let time, let lib): Logger.error("DYLD INJECTION: $$lib)")
