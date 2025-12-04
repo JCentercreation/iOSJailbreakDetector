@@ -1,5 +1,16 @@
 # iOSJailbreakDetector
 
+<div align="center">
+
+![Swift](https://img.shields.io/badge/Swift-5.0+-orange.svg)
+![Platform](https://img.shields.io/badge/Platform-iOS-blue.svg)
+![Xcode](https://img.shields.io/badge/Xcode-12.0+-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+[Installation](#-installation) • [Usage](#-usage) • [Detection Methods](#-detection_methods) • [Limitations](#-limitations)
+
+</div>
+
 **Swift Package Manager** • **MIT License**
 
 Multi-layered jailbreak detection library for iOS applications. Implements 8 independent detection vectors with confidence scoring and timing-based evasion resistance.
@@ -115,3 +126,12 @@ LSApplicationQueriesSchemes cydia filza sileo
 ## License
 
 MIT License © 2025
+
+<div align="center">
+
+**Made for the iOS development community**
+**Use it responsibly**
+
+[⬆ Back to Top](#iOSJailbreakDetector)
+
+</div>
