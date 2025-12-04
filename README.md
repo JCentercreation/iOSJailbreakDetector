@@ -6,9 +6,9 @@ Multi-layered jailbreak detection library for iOS applications. Implements 8 ind
 
 <div align="center">
 
-![Swift](https://img.shields.io/badge/Swift-5.0+-orange.svg)
-![Platform](https://img.shields.io/badge/Platform-iOS-blue.svg)
-![Xcode](https://img.shields.io/badge/Xcode-12.0+-blue.svg)
+![Swift](https://img.shields.io/badge/Swift-5.5+-orange.svg)
+![Platform](https://img.shields.io/badge/Platform-iOS13+-blue.svg)
+![Xcode](https://img.shields.io/badge/Xcode-13.0+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 </div>
@@ -28,9 +28,9 @@ Key features include:
 
 | Platform | Minimum Version |
 |----------|-----------------|
-| iOS | 12.0+ |
-| Xcode | 15.0+ |
-| Swift | 5.9+ |
+| iOS | 13.0+ |
+| Xcode | 13.0+ |
+| Swift | 5.5+ |
 
 **Dependencies:** `UIKit`, `Darwin`
 
