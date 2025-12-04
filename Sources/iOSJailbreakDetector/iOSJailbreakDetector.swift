@@ -31,7 +31,7 @@ public final class iOSJailbreakDetector {
     /// - `estimatedConfidenceLevel = detectionsCounter / totalChecks` (0.0 - 1.0)
     /// - `isJailBroken = detectionsCounter > 0` (any detection triggers)
     ///
-    /// **Returns:** `JailbreakDetectionResult` containing:
+    /// **Returns:** ``JailbreakDetectionResult` containing:
     /// - `isJailBroken`: Boolean detection result
     /// - `jailbreakDetectionIndicator`: Array of triggered indicators for logging/forensics
     /// - `estimatedConfidenceLevel`: Float confidence (0.125 = 1/8 checks, 1.0 = all checks failed)
@@ -213,7 +213,11 @@ public final class iOSJailbreakDetector {
     /// Attempts to detect a jailbroken iOS device by checking for the existence of known jailbreak-related files outside the app sandbox.
     /// Measures the duration of each access to identify potential hooks or delays indicative of jailbreak tampering.
     ///
-    /// - Returns: A `SuspiciousFilesWithTimingResult` indicating the detection status:
+    /// - Parameters:
+    ///   - path: The path of the file you want to check (e.g., `"/Applications/Cydia.app"`, `"/usr/bin/ssh"`).
+    ///   - suspiciousJailbreakHookTimingInSeconds: Time (in seconds) threshold for considering a runtime hooking.
+    ///
+    /// - Returns: A ``SuspiciousFilesWithTimingResult`` indicating the detection status:
     ///   - `.clean` if no suspicious files or delays detected
     ///   - `.jailbroken(accessTime:path)` if a suspicious file was accessed quickly (jailbreak confirmed)
     ///   - `.suspicious(delay:path)` if file access was delayed suspiciously, indicating possible runtime hooking or tampering
@@ -293,7 +297,7 @@ public final class iOSJailbreakDetector {
     ///   - library: Name of the dynamic library to check (e.g., `"MobileSubstrate.dylib"`, `"libhooker.dylib"`).
     ///   - timeoutSeconds: Maximum time (in seconds) to wait for `dlopen`. Defaults to 0.1s.
     ///
-    /// - Returns: Detailed detection result including success status and timing information:
+    /// - Returns: A ``DYLDInjectionResult`` indicating the detection status:
     ///   - `.clean(loadTime:library:)`: No injection detected
     ///   - `.suspicious(delay:library:)`: Suspicious delay during load attempt (possible hooking)
     ///   - `.injected(handle:loadTime:library:)`: Confirmed injection - library successfully loaded
