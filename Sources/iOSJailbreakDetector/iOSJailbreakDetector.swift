@@ -367,7 +367,7 @@ public extension iOSJailbreakDetector {
     ///   - isJailBroken: `true` if any detection indicators were triggered
     ///   - jailbreakDetectionIndicator: Array of specific indicators that fired (for forensics)
     ///   - estimatedConfidenceLevel: Detection confidence (0.0 = clean, 1.0 = all checks failed)
-    struct JailbreakDetectionResult {
+    public struct JailbreakDetectionResult {
         let isJailBroken: Bool
         let jailbreakDetectionIndicator: [JailbreakDetectionIndicators]
         let estimatedConfidenceLevel: Float
@@ -392,7 +392,7 @@ public extension iOSJailbreakDetector {
     ///     reportDYLDInjection()
     /// }
     /// ```
-    enum JailbreakDetectionIndicators: CaseIterable {
+    public enum JailbreakDetectionIndicators: CaseIterable {
         case jailbreakURLSchemesDetected
         case suspiciousFilesDetected
         case systemPathsViolationDetected
@@ -427,7 +427,7 @@ public extension iOSJailbreakDetector {
     /// - `< 50ms` + file exists = `.jailbroken` (direct access)
     /// - `> 50ms` on non-existent = `.suspicious` (hooking delay)
     /// - Normal timing = `.clean`
-    enum SuspiciousFilesWithTimingResult {
+    public enum SuspiciousFilesWithTimingResult {
         case clean
         case jailbroken(accessTime: Double, path: String)
         case suspicious(delay: Double, path: String)
@@ -452,7 +452,7 @@ public extension iOSJailbreakDetector {
     /// case .clean: break
     /// }
     /// ```
-    enum DYLDInjectionResult {
+    public enum DYLDInjectionResult {
         case clean(loadTime: Double, library: String)
         case suspicious(delay: Double, library: String)
         case injected(handle: UnsafeMutableRawPointer?, loadTime: Double, library: String)
