@@ -344,7 +344,40 @@ public final class iOSJailbreakDetector {
 
 extension iOSJailbreakDetector {
     
-    private func checkURLSchemes() -> Bool {
+    public struct JailbreakDetectionResult {
+        let isJailBroken: Bool
+        let jailbreakDetectionIndicator: [JailbreakDetectionIndicators]
+        let estimatedConfidenceLevel: Float
+    }
+    
+    public enum DYLDInjectionResult {
+        case clean(loadTime: Double, library: String)
+        case suspicious(delay: Double, library: String)
+        case injected(handle: UnsafeMutableRawPointer?, loadTime: Double, library: String)
+    }
+    
+    public enum JailbreakDetectionIndicators: CaseIterable {
+        case jailbreakURLSchemesDetected
+        case suspiciousFilesDetected
+        case systemPathsViolationDetected
+        case dynamicLinkerInjectionDetected
+        case sandboxCompromisedIntegrityDetected
+        case suspiciousSymbolicLinksDetected
+        case forkBehaviourAnomalyDetected
+        case suspiciousEnvironmentVariablesDetected
+    }
+    
+    public enum SuspiciousFilesWithTimingResult {
+        case clean
+        case jailbroken(accessTime: Double, path: String)
+        case suspicious(delay: Double, path: String)
+    }
+    
+}
+
+private extension iOSJailbreakDetector {
+    
+    func checkURLSchemes() -> Bool {
         let schemes = [
             "cydia://", "filza://", "undecimus://", "sileo://",
             "zbra://", "substitute://", "activator://"
@@ -359,7 +392,7 @@ extension iOSJailbreakDetector {
         return false
     }
     
-    private func checkSuspiciousFiles() -> Bool {
+    func checkSuspiciousFiles() -> Bool {
         let paths = [
             "/Applications/Cydia.app",
             "/Library/MobileSubstrate/MobileSubstrate.dylib",
@@ -385,7 +418,7 @@ extension iOSJailbreakDetector {
         return false
     }
     
-    private func checkSystemPathViolations() -> Bool {
+    func checkSystemPathViolations() -> Bool {
         do {
             let testString = "jailbreak_test"
             let testPath = "/private/jailbreak_test.txt"
@@ -398,7 +431,7 @@ extension iOSJailbreakDetector {
         }
     }
     
-    private func checkDYLDInjection() -> Bool {
+    func checkDYLDInjection() -> Bool {
         let suspiciousLibraries = [
             "SubstrateLoader.dylib",
             "SSLKillSwitch2.dylib",
@@ -418,7 +451,7 @@ extension iOSJailbreakDetector {
         return false
     }
     
-    private func checkSandboxIntegrity() -> Bool {
+    func checkSandboxIntegrity() -> Bool {
         let pid = getpid()
         var info = kinfo_proc()
         var mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
@@ -433,7 +466,7 @@ extension iOSJailbreakDetector {
         return false
     }
     
-    private func checkSymbolicLinks() -> Bool {
+    func checkSymbolicLinks() -> Bool {
         let checkPaths = [
             "/Applications",
             "/Library/Ringtones",
@@ -458,7 +491,7 @@ extension iOSJailbreakDetector {
         return false
     }
     
-    private func checkForkBehaviour() -> Bool {
+    func checkForkBehaviour() -> Bool {
         var pid: pid_t = 0
         let args: [UnsafeMutablePointer<CChar>?] = [nil]
         let env: [UnsafeMutablePointer<CChar>?] = [nil]
@@ -474,7 +507,7 @@ extension iOSJailbreakDetector {
         return false
     }
     
-    private func checkEnvironmentVariables() -> Bool {
+    func checkEnvironmentVariables() -> Bool {
         let suspiciousVars = [
             "DYLD_INSERT_LIBRARIES",
             "_MSSafeMode",
