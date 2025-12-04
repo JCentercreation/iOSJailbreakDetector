@@ -11,8 +11,6 @@ Multi-layered jailbreak detection library for iOS applications. Implements 8 ind
 ![Xcode](https://img.shields.io/badge/Xcode-12.0+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-[Installation](#-installation)  
-
 </div>
 
 ## Overview
