@@ -1,12 +1,12 @@
 # iOSJailbreakDetector
 
-**Swift Package Manager** • **iOS 12+** • **App Store Safe** • **MIT License**
+**Swift Package Manager** • **MIT License**
 
 Multi-layered jailbreak detection library for iOS applications. Implements 8 independent detection vectors with confidence scoring and timing-based evasion resistance.
 
 ## Overview
 
-`iOSJailbreakDetector` provides production-ready jailbreak detection suitable for App Store distribution. Key features include:
+Key features include:
 
 - 8 orthogonal detection methods (files, DYLD, sandbox, environment)
 - Confidence scoring (0.0-1.0) based on detection ratio
@@ -37,7 +37,7 @@ dependencies: [ .package(url: “https://github.com/jcentercreation/iOSJailbre
 ### Xcode
 
 1. File → Add Package Dependencies
-2. Enter package URL: `https://github.com/[your-username]/iOSJailbreakDetector.git`
+2. Enter package URL: `https://github.com/jcentercreation/iOSJailbreakDetector.git`
 3. Select version rule: "Up to Next Major Version"
 
 ## Usage
