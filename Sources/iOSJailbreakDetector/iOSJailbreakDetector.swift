@@ -1,7 +1,9 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+#if canImport(UIKit)
 import UIKit
+#endif
 
 @MainActor
 public final class iOSJailbreakDetector {
