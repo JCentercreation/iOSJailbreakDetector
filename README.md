@@ -13,6 +13,10 @@ Multi-layered jailbreak detection library for iOS applications. Implements 8 ind
 
 </div>
 
+## Documentation
+
+Find full documentation [here](https://jcentercreation.github.io/iOSJailbreakDetector/documentation/iosjailbreakdetector/)
+
 ## Overview
 
 Key features include:
