@@ -176,9 +176,11 @@ public final class iOSJailbreakDetector {
     /// - Parameter urlScheme: The URL whose scheme availability to check.
     /// - Returns: `true` if the system can open the URL, `false` otherwise.
     public func checkURLScheme(urlScheme: URL) -> Bool {
+        #if canImport(UIKit)
         if UIApplication.shared.canOpenURL(urlScheme) {
             return true
         }
+        #endif
         return false
     }
     
@@ -357,13 +359,13 @@ private extension iOSJailbreakDetector {
             "cydia://", "filza://", "undecimus://", "sileo://",
             "zbra://", "substitute://", "activator://"
         ]
-        
+        #if canImport(UIKit)
         for scheme in schemes {
             if let url = URL(string: scheme), UIApplication.shared.canOpenURL(url) {
                 return true
             }
         }
-        
+        #endif
         return false
     }
     
