@@ -64,9 +64,10 @@ let detector = iOSJailbreakDetector.shared
 let result = detector.detectJailbreak()
 
 if result.isJailBroken && result.estimatedConfidenceLevel > 0.5 {
-    Logger.security.error(“””
-        Jailbreak detected: result.jailbreakDetectionIndicator.map { “$0)” }) Confidence: $$result.estimatedConfidenceLevel, format: .percent)
-    “””)
+    Logger.security.error("""
+        Jailbreak detected: \(result.jailbreakDetectionIndicator.map { "\($0)" })
+        Confidence: \(result.estimatedConfidenceLevel, format: .percent)
+    """)
     // Implement security measures
 } else {
     Logger.security.info(“Device verified clean”)
